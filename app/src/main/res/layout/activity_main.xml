@@ -7,51 +7,36 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btn_getCityID"
+        android:id="@+id/btn_searchMeal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cidade / ID"
-        app:layout_constraintEnd_toStartOf="@+id/btn_getWeatherByCityID"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_getWeatherByCityID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tempo / ID"
-        app:layout_constraintEnd_toStartOf="@+id/get_WeatherByCityName"
-        app:layout_constraintStart_toEndOf="@+id/btn_getCityID"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/get_WeatherByCityName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tempo / Cidade"
+        android:text="Search Meal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_getWeatherByCityID"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_dataInput"
-        android:layout_width="391dp"
-        android:layout_height="65dp"
-        android:layout_marginTop="24dp"
+        android:id="@+id/et_searchInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="CityName"
+        android:hint="Enter meal name"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_getCityID" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_searchMeal"
+        android:autofillHints="" />
 
     <ListView
-        android:id="@+id/lv_weatherReports"
-        android:layout_width="409dp"
-        android:layout_height="592dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/lv_recipeList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_dataInput" />
+        app:layout_constraintTop_toBottomOf="@+id/et_searchInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
