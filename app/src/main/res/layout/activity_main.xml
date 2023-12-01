@@ -4,39 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@color/light_gray"
+    android:padding="16dp">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_searchMeal"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/dark_blue"
         android:text="Search Meal"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/et_searchInput"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_searchInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Enter meal name"
-        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_searchMeal"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_searchMeal">
 
-    <ListView
-        android:id="@+id/lv_recipeList"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_searchInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_blue"
+            android:hint="Enter meal name"
+            android:inputType="text"
+            android:textColor="@android:color/black" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_recipeList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_searchInput" />
+        app:layout_constraintTop_toBottomOf="@+id/til_searchInput"
+        app:layout_constraintVertical_bias="0.391"
+        app:layout_constraintWidth_default="spread"
+        app:layout_constraintHeight_default="spread" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="1018dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
