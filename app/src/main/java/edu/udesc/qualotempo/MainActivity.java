@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_searchMeal;
     private EditText et_searchInput;
     private RecyclerView rv_recipeList;
-
+    private boolean isLoading = false;
+    private int currentPage = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,25 @@ public class MainActivity extends AppCompatActivity {
         rv_recipeList.setLayoutManager(new LinearLayoutManager(this));
         rv_recipeList.setAdapter(recipeAdapter);
 
+        // Add the onScrollListener here
+        rv_recipeList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    // Load more recipes
+                    currentPage++;
+                    new GetRecipeData(et_searchInput.getText().toString());
+                }
+            }
+        });
+
         btn_searchMeal.setOnClickListener(v -> {
             String mealName = et_searchInput.getText().toString();
             if (mealName.isEmpty()) {
@@ -63,4 +84,5 @@ public class MainActivity extends AppCompatActivity {
     public AutoCompleteTextView getAutoCompleteTextView() {
         return findViewById(R.id.autoCompleteTextView);
     }
+
 }

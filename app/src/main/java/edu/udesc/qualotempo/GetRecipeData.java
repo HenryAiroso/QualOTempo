@@ -1,8 +1,5 @@
 package edu.udesc.qualotempo;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
@@ -31,6 +28,10 @@ public class GetRecipeData {
         this.mainActivity = mainActivity;
     }
 
+    public GetRecipeData(String toString) {
+
+    }
+
     public void getRecipeData(String mealName) {
         String mealUrl = MEAL_URL + mealName;
 
@@ -41,6 +42,8 @@ public class GetRecipeData {
         // Create a new request queue using the cache and network
         RequestQueue queue = new RequestQueue(cache, network);
         queue.start();
+
+
 
         JsonObjectRequest mealRequest = new JsonObjectRequest(Request.Method.GET, mealUrl, null,
                 new Response.Listener<JSONObject>() {

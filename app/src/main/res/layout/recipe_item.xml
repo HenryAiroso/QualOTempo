@@ -4,13 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="2dp">
-
-
+        android:padding="2dp"
+        android:fillViewport="true">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
@@ -28,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="24sp"
+                android:textSize="12sp"
                 android:textStyle="normal" />
 
             <!-- Adicione mais views aqui para exibir informações adicionais da receita -->
