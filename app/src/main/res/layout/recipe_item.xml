@@ -8,8 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="2dp"
-        android:fillViewport="true">
+        android:padding="2dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
@@ -27,10 +26,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="12sp"
+                android:textSize="24sp"
                 android:textStyle="normal" />
 
-            <!-- Adicione mais views aqui para exibir informações adicionais da receita -->
+            <TextView
+                android:id="@+id/tv_recipeCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/tv_recipeInstructions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/btn_deleteRecipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete Recipe" />
+
+            <!-- Add more views here to display additional recipe information -->
 
         </com.google.android.material.card.MaterialCardView>
 

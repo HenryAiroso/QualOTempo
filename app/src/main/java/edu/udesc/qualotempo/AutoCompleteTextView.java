@@ -1,6 +1,10 @@
 package edu.udesc.qualotempo;
 
+import android.content.Context;
+import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
+
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -14,12 +18,19 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutoCompleteTextView {
-    private MainActivity mainActivity;
+public class AutoCompleteTextView extends AppCompatAutoCompleteTextView {
     private ArrayAdapter<String> adapter;
 
-    public AutoCompleteTextView(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    public AutoCompleteTextView(Context context) {
+        super(context);
+    }
+
+    public AutoCompleteTextView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public AutoCompleteTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     public void setAdapter(ArrayAdapter<String> adapter) {
@@ -45,12 +56,7 @@ public class AutoCompleteTextView {
                             adapter.addAll(suggestions);
 
                             // Set the adapter to the AutoCompleteTextView
-                            mainActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mainActivity.getAutoCompleteTextView().setAdapter(adapter);
-                                }
-                            });
+                            AutoCompleteTextView.this.setAdapter(adapter);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -64,6 +70,6 @@ public class AutoCompleteTextView {
                 });
 
         // Add the request to the Volley request queue
-        Volley.newRequestQueue(mainActivity).add(request);
+        Volley.newRequestQueue(getContext()).add(request);
     }
 }

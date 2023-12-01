@@ -1,88 +1,86 @@
 package edu.udesc.qualotempo;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity {
+    private ArrayList<Food> foodList = new ArrayList<>();
+    private FoodAdapter foodAdapter;
+    private TextInputEditText etSearchInput;
+    private Button btnSearchMeal;
+    private List<RecipeModel> recipeList;
+    private RecipeAdapter adapter;
 
-    private RecipeAdapter recipeAdapter;
-    private List<String> recipeList;
-    private Button btn_searchMeal;
-    private EditText et_searchInput;
-    private RecyclerView rv_recipeList;
-    private boolean isLoading = false;
-    private int currentPage = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_main);
+
+            RecyclerView recyclerView = findViewById(R.id.rv_recipeList);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            recipeList = new ArrayList<>();
+            adapter = new RecipeAdapter(recipeList); // Initialize the adapter
+            recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         recipeList = new ArrayList<>();
+        adapter = new RecipeAdapter(recipeList);
+        recyclerView.setAdapter(adapter);
 
-        btn_searchMeal = findViewById(R.id.btn_searchMeal);
-        et_searchInput = findViewById(R.id.et_searchInput);
-        rv_recipeList = findViewById(R.id.rv_recipeList);
-
-        recipeAdapter = new RecipeAdapter(recipeList, new RecipeAdapter.OnItemClickListener() {
+        btnSearchMeal = findViewById(R.id.btn_searchMeal); // Remove the data type declaration here
+        btnSearchMeal.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(String recipe) {
-                // Handle recipe item click
-            }
-        });
+            public void onClick(View v) {
+                TextInputEditText etSearchInput = findViewById(R.id.et_searchInput);
+                String searchInput = etSearchInput.getText().toString();
 
-        rv_recipeList.setLayoutManager(new LinearLayoutManager(this));
-        rv_recipeList.setAdapter(recipeAdapter);
+                Toast.makeText(MainActivity.this, "Button clicked: " + searchInput, Toast.LENGTH_SHORT).show();
 
-        // Add the onScrollListener here
-        rv_recipeList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+                List<RecipeModel> filteredRecipes = filterRecipes(searchInput);
 
-                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int visibleItemCount = layoutManager.getChildCount();
-                int totalItemCount = layoutManager.getItemCount();
-                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-
-                if (!isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
-                    // Load more recipes
-                    currentPage++;
-                    new GetRecipeData(et_searchInput.getText().toString());
-                }
-            }
-        });
-
-        btn_searchMeal.setOnClickListener(v -> {
-            String mealName = et_searchInput.getText().toString();
-            if (mealName.isEmpty()) {
-                Toast.makeText(MainActivity.this, "Please enter a meal name", Toast.LENGTH_SHORT).show();
-            } else {
-                GetRecipeData getRecipeData = new GetRecipeData(MainActivity.this);
-                getRecipeData.getRecipeData(mealName);
+                recipeList.clear();
+                recipeList.addAll(filteredRecipes);
+                adapter.notifyDataSetChanged();
             }
         });
     }
 
-    public void updateRecipeList(String recipe) {
-        recipeList.add(recipe);
-        recipeAdapter.notifyDataSetChanged();
+    private List<RecipeModel> filterRecipes(String searchInput) {
+        List<RecipeModel> filteredRecipes = new ArrayList<>();
+
+        for (RecipeModel recipe : recipeList) {
+            if (recipe.getName().toLowerCase().contains(searchInput.toLowerCase()) ||
+                    recipe.getCategory().toLowerCase().contains(searchInput.toLowerCase())) {
+                filteredRecipes.add(recipe);
+            }
+        }
+
+        return filteredRecipes;
     }
 
-    public AutoCompleteTextView getAutoCompleteTextView() {
-        return findViewById(R.id.autoCompleteTextView);
+    private void performSearch(String mealName) {
+        GetRecipeData getRecipeData = new GetRecipeData(MainActivity.this);
+        getRecipeData.getRecipeData(mealName);
     }
 
+    public void updateFoodList(List<Food> foodList) {
+        this.foodList.clear();
+        this.foodList.addAll(foodList);
+        foodAdapter.notifyDataSetChanged();
+    }
 }

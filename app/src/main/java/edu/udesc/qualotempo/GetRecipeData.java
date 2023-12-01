@@ -1,18 +1,20 @@
 package edu.udesc.qualotempo;
 
+import android.content.Context;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.android.volley.Cache;
-import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
-
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,72 +22,54 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetRecipeData {
-    private MainActivity mainActivity;
-    private static final String MEAL_URL = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
-    public GetRecipeData(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-    }
-
-    public GetRecipeData(String toString) {
-
+public class GetRecipeData{
+    private Context context;
+    private RequestQueue requestQueue;
+    private List<RecipeModel> recipeList = new ArrayList<>();
+    public GetRecipeData(Context context) {
+        this.context = context;
+        this.requestQueue = Volley.newRequestQueue(context);
     }
 
     public void getRecipeData(String mealName) {
-        String mealUrl = MEAL_URL + mealName;
+        String url = "https://api.example.com/recipes?meal=" + mealName;
 
-        // Create a cache and network for the request queue
-        Cache cache = new DiskBasedCache(mainActivity.getCacheDir(), 1024 * 1024); // 1MB cap
-        Network network = new BasicNetwork(new HurlStack());
-
-        // Create a new request queue using the cache and network
-        RequestQueue queue = new RequestQueue(cache, network);
-        queue.start();
-
-
-
-        JsonObjectRequest mealRequest = new JsonObjectRequest(Request.Method.GET, mealUrl, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONArray mealsArray = response.getJSONArray("meals");
+                            JSONArray recipesArray = response.getJSONArray("recipes");
+                            List<RecipeModel> recipes = new ArrayList<>();
 
-                            if (mealsArray.length() > 0) {
-                                List<String> recipeList = new ArrayList<>();
+                            for (int i = 0; i < recipesArray.length(); i++) {
+                                JSONObject recipeObject = recipesArray.getJSONObject(i);
+                                String name = recipeObject.getString("name");
+                                String category = recipeObject.getString("category");
+                                String instructions = recipeObject.getString("instructions");
 
-                                for (int i = 0; i < mealsArray.length(); i++) {
-                                    JSONObject mealObject = mealsArray.getJSONObject(i);
-                                    String foundMealName = mealObject.getString("strMeal");
-                                    String mealCategory = mealObject.getString("strCategory");
-                                    String mealInstructions = mealObject.getString("strInstructions");
-
-                                    String recipe = "Meal Name: " + foundMealName + "\nCategory: " + mealCategory + "\nInstructions: " + mealInstructions;
-                                    recipeList.add(recipe);
-                                }
-
-                                // Update the recipe list in the main activity
-                                mainActivity.updateRecipeList(recipeList.toString());
-                            } else {
-                                // Handle the case when the "meals" array is empty
-                                Toast.makeText(mainActivity, "No meals found", Toast.LENGTH_SHORT).show();
+                                RecipeModel recipe = new RecipeModel(name, category, instructions);
+                                recipes.add(recipe);
                             }
+
+                            // Update the recipeList and notify the adapter
+                            recipeList.clear();
+                            recipeList.addAll(recipes);
+                            ArrayAdapter<Object> adapter = null;
+                            adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
-                            // Handle the case when the "meals" value is null or not a JSON array
                             e.printStackTrace();
-                            Toast.makeText(mainActivity, "Error: Invalid response format", Toast.LENGTH_SHORT).show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(mainActivity, "Network error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
                     }
                 });
 
-        // Add the request to the queue
-        queue.add(mealRequest);
+        requestQueue.add(request);
     }
 }
